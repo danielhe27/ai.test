@@ -24,10 +24,9 @@ const parser = StructuredOutputParser.fromNamesAndDescriptions({
 });
 
 const formatInstructions = parser.getFormatInstructions();
-
 // Instantiation of a new object called "prompt" using the "PromptTemplate" class
 const prompt = new PromptTemplate({
-  template: "You are a programming expert and will answer the user’s coding questions as thoroughly as possible using JavaScript. If the question is unrelated to coding, do not answer.\n{format_instructions}\n{question}",
+  template: "You are a programming expert and will answer the user’s coding questions as thoroughly as possible using JavaScript. If the question is unrelated to coding, do not answer.\n{question}",
   inputVariables: ["question"],
   partialVariables: { format_instructions: formatInstructions }
 });
@@ -42,7 +41,7 @@ const promptFunc = async (input) => {
     // Call the model with the formatted prompt
     const res = await model.invoke(promptInput);
     
-    // For a non-coding question, the model simply returns an error message, causing parse() to throw an exception.
+    // For a non-coding question, the model returns an error message, causing parse() to throw an exception.
     // In this case, simply return the error message instead of the parsed results.
     try { 
       const parsedResult = await parser.parse(res);
@@ -55,7 +54,7 @@ const promptFunc = async (input) => {
     console.error(err);
     throw(err);
   }
-};
+};  
 
 // Endpoint to handle request
 app.post('/ask', async (req, res) => {
